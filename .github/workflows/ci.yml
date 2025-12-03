@@ -5,6 +5,7 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
   docker-security-scan:
@@ -17,13 +18,11 @@ jobs:
       - name: Build Docker Image
         run: docker build -t fastapi-app .
 
-      - name: Install Trivy
+      - name: Run Trivy Scan (Docker version)
         run: |
-          sudo apt-get update
-          sudo apt-get install -y wget
-          wget https://github.com/aquasecurity/trivy/releases/latest/download/trivy_0.49.1_Linux-64bit.deb
-          sudo dpkg -i trivy_0.49.1_Linux-64bit.deb
-
-      - name: Run Trivy Scan
-        run: |
-          trivy image --severity HIGH,CRITICAL --exit-code 1 fastapi-app
+          docker run --rm \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            aquasec/trivy:latest image \
+            --severity HIGH,CRITICAL \
+            --exit-code 1 \
+            fastapi-app
