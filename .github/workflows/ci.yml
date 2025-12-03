@@ -12,17 +12,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v3
 
+      # Build your Docker image
       - name: Build Docker Image
         run: docker build -t fastapi-app .
 
-      - name: Run Trivy Scan (Docker version)
+      # Save Docker image into a TAR file (Option 3)
+      - name: Save Docker image as tar
+        run: docker save fastapi-app -o fastapi-app.tar
+
+      # Run Trivy against the TAR image (low disk usage)
+      - name: Run Trivy Scan (TAR mode)
         run: |
           docker run --rm \
-            -v /var/run/docker.sock:/var/run/docker.sock \
+            -v $(pwd):/project \
             aquasec/trivy:latest image \
+            --input /project/fastapi-app.tar \
             --severity HIGH,CRITICAL \
             --exit-code 1 \
-            fastapi-app
+            --no-progress
+
+      # Install kube-score using Docker (clean, no dependencies)
+      - name: Run kube-score (lint Kubernetes manifests)
+        run: |
+          docker run --rm \
+            -v $(pwd):/project \
+            zegl/kube-score:latest \
+              kube-score score --output-format ci /project/deployment.yaml
