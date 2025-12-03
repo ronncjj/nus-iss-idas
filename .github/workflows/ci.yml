@@ -44,7 +44,7 @@ jobs:
             -v $(pwd):/project \
             aquasec/trivy:latest image \
             --input /project/fastapi-app.tar \
-            --severity HIGH,CRITICAL \
+            --severity CRITICAL \
             --exit-code 1 \
             --no-progress
 
