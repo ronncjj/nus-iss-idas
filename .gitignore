@@ -1,0 +1,95 @@
+# ------------------------
+# Python Cache Files
+# ------------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pdm
+*.pkl
+*.pickle
+
+# ------------------------
+# Virtual Environments
+# ------------------------
+venv/
+.venv/
+env/
+env.bak/
+ENV/
+
+# ------------------------
+# Package / Build Artifacts
+# ------------------------
+build/
+dist/
+*.egg-info/
+.eggs/
+.installed.cfg
+*.egg
+
+# ------------------------
+# Model Files (local Llama / GGUF)
+# ------------------------
+models/*.gguf
+models/*.bin
+models/*.pt
+models/*.safetensors
+
+# ------------------------
+# DeepEval Cache
+# ------------------------
+.deepeval/
+pytest_cache/
+
+# ------------------------
+# Test & Coverage
+# ------------------------
+htmlcov/
+.coverage
+.coverage.*
+.cache/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+hypothesis/
+tests/__pycache__/
+
+# ------------------------
+# Logs
+# ------------------------
+*.log
+
+# ------------------------
+# Editor / IDE Files
+# ------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ------------------------
+# OS Files
+# ------------------------
+.DS_Store
+Thumbs.db
+
+# ------------------------
+# Jupyter / Notebooks
+# ------------------------
+.ipynb_checkpoints/
+*.ipynb
+
+# ------------------------
+# Environment / Secrets
+# ------------------------
+.env
+.env.*
+*.key
+*.pem
+
+# ------------------------
+# Local Configs
+# ------------------------
+pyvenv.cfg
