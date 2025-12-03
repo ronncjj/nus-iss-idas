@@ -12,18 +12,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Free up disk space 🧹
+        run: |
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /home/linuxbrew
+          df -h
+
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Build your Docker image
+      - name: Clean Docker before build
+        run: |
+          docker system prune -af || true
+          docker volume prune -f || true
+          df -h
+
       - name: Build Docker Image
         run: docker build -t fastapi-app .
 
-      # Save Docker image into a TAR file (Option 3)
       - name: Save Docker image as tar
-        run: docker save fastapi-app -o fastapi-app.tar
+        run: |
+          docker save fastapi-app -o fastapi-app.tar
+          ls -lh fastapi-app.tar
+          df -h
 
-      # Run Trivy against the TAR image (low disk usage)
       - name: Run Trivy Scan (TAR mode)
         run: |
           docker run --rm \
@@ -34,7 +48,6 @@ jobs:
             --exit-code 1 \
             --no-progress
 
-      # Install kube-score using Docker (clean, no dependencies)
       - name: Run kube-score (lint Kubernetes manifests)
         run: |
           docker run --rm \
